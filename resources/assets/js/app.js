@@ -8,14 +8,12 @@ const app = new Vue({
     	user: [],
     },
     methods: {
-    	loggedIn: function(data){
-    		//this.user = data;
-    	}
+    	
     },
     mounted(){
     	this.$bus.$on('loggedin',(data)=> {
-    		alert("Logged In");
-    		this.user = data
+    		this.user = data;
+            this.$router.push('home');
     	});
     }
 });

@@ -1,10 +1,9 @@
 import VueRouter from 'vue-router';
-import login from './components/loginComponent';
 
 let routes = [
 	{
 		path: "/",
-		component: login
+		component: require('./components/loginComponent')
 	},
 	{
 		path: "/home",

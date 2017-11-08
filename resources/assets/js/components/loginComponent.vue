@@ -27,7 +27,7 @@
                   Remember me
                 </label>
               </div>
-              <a class="button is-block is-info is-large" @click="login()">Login</a>
+              <a class="button is-block is-info is-large" :class="{'is-loading':loading}" @click="login()">Login</a>
             </form>
           </div>
           <p class="has-text-grey">
@@ -50,10 +50,14 @@ export default {
     return {
     	email:'',
     	password:'',
+      loading: false,
     }
   },
   methods:{
   	login(){
+
+      this.loading = true;
+
   		/**
   		 * login request
   		 */
@@ -69,6 +73,7 @@ export default {
   			.then(response=>{
   				console.log(response.data);
   				this.$bus.$emit('loggedin',response.data); //emit loggedin event on successfull login
+          this.loading = false;
   			})
   			.catch(error=>{
           /**
@@ -76,6 +81,7 @@ export default {
            */
   				console.log(error.response.data.message);
   				alert(error.response.data.message);
+          this.loading = false;
   			});
   		})
   		.catch(error=>{
@@ -84,6 +90,7 @@ export default {
          */
   			console.log(error.response.data.message);
   			alert(error.response.data.message);
+        this.loading = false;
   		})
   	}
   }

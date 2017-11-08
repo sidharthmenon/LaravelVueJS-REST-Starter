@@ -3723,17 +3723,13 @@ var app = new Vue({
     data: {
         user: []
     },
-    methods: {
-        loggedIn: function loggedIn(data) {
-            //this.user = data;
-        }
-    },
+    methods: {},
     mounted: function mounted() {
         var _this = this;
 
         this.$bus.$on('loggedin', function (data) {
-            alert("Logged In");
             _this.user = data;
+            _this.$router.push('home');
         });
     }
 });
@@ -15537,14 +15533,11 @@ module.exports = function spread(callback) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_loginComponent__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_loginComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_loginComponent__);
-
 
 
 var routes = [{
 	path: "/",
-	component: __WEBPACK_IMPORTED_MODULE_1__components_loginComponent___default.a
+	component: __webpack_require__(37)
 }, {
 	path: "/home",
 	component: __webpack_require__(45)
@@ -16040,13 +16033,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      loading: false
     };
   },
 
   methods: {
     login: function login() {
       var _this = this;
+
+      this.loading = true;
 
       /**
        * login request
@@ -16061,12 +16057,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         axios.get('api/user').then(function (response) {
           console.log(response.data);
           _this.$bus.$emit('loggedin', response.data); //emit loggedin event on successfull login
+          _this.loading = false;
         }).catch(function (error) {
           /**
            * Error when retrieving user data
            */
           console.log(error.response.data.message);
           alert(error.response.data.message);
+          _this.loading = false;
         });
       }).catch(function (error) {
         /**
@@ -16074,6 +16072,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          */
         console.log(error.response.data.message);
         alert(error.response.data.message);
+        _this.loading = false;
       });
     }
   }
@@ -16172,6 +16171,7 @@ var render = function() {
                 "a",
                 {
                   staticClass: "button is-block is-info is-large",
+                  class: { "is-loading": _vm.loading },
                   on: {
                     click: function($event) {
                       _vm.login()
