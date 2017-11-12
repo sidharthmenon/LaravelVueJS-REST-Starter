@@ -13,18 +13,21 @@
 
   <div id="navbarExampleTransparentExample" class="navbar-menu" :class="{'is-active': isActive}">
     <div class="navbar-start">
-	  <a v-for="item in menu" v-if="!item.hasChild" class="navbar-item" :href="item.path">
-        {{item.name}}
-      </a>
+
+      <router-link v-for="item in menu" v-if="!item.hasChild" class="navbar-item" :to="item.path" :key="item.id" >{{item.name}}</router-link>
+
       <div v-for="item in menu" v-if="item.hasChild" class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" :href="item.path">
+        
+        <router-link class="navbar-link" :to="item.path" >
           {{item.name}}
-        </a>
+        </router-link>
+
         <div class="navbar-dropdown">
-          <a v-for="child in item.children" class="navbar-item" :href="child.path">
+          <router-link v-for="child in item.children" class="navbar-item" :to="child.path" :key="child.id" >
             {{child.name}}
-          </a>
+          </router-link>
         </div>
+
       </div>
     </div>
 
@@ -32,7 +35,7 @@
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control">
-            <a class="button is-primary" href="#">
+            <a class="button is-primary" href="#" @click="logout()">
               <span class="icon">
                 <i class="fa fa-download"></i>
               </span>
@@ -57,12 +60,12 @@ export default {
     	menu: [
     		{
     			name: "Home",
-    			path: "#/home",
+    			path: "/home",
     			hasChild: false
     		},
     		{
     			name: "Menu1",
-    			path: "/home",
+    			path: "/home/login",
     			hasChild: true,
     			children: [
     				{
@@ -77,10 +80,15 @@ export default {
     		},
     		{
     			name: "People",
-    			path: "#/home/login",
+    			path: "/home/login",
     			hasChild: false
     		}
     	]
+    }
+  },
+  methods:{
+    logout: function(){
+      this.$bus.$emit('loggedout');
     }
   }
 }
