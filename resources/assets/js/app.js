@@ -1,6 +1,6 @@
 import './bootstrap'
 import router from './routes'
-import config from './store'
+
 
 const app = new Vue({
     el: '#app',
@@ -29,5 +29,6 @@ const app = new Vue({
         this.$bus.$on('loggedout', ()=>this.loggedOut());
         
         console.log("mounted");
+        console.log(config.url);
     }
 });

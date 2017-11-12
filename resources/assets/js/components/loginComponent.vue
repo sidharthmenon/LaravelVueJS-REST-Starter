@@ -31,7 +31,7 @@
             </form>
           </div>
           <p class="has-text-grey">
-            <a href="../">Sign Up</a> &nbsp;·&nbsp;
+            <a href="/#/home">Sign Up</a> &nbsp;·&nbsp;
             <a href="../">Forgot Password</a> &nbsp;·&nbsp;
             <a href="../">Need Help?</a>
           </p>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+
 export default {
 
   name: 'login',
@@ -61,7 +62,7 @@ export default {
   		/**
   		 * login request
   		 */
-  		axios.post('api/login',{'email':this.email, 'password':this.password})
+  		axios.post(config.url+'api/login',{'email':this.email, 'password':this.password})
   		.then(response=>{
   			console.log(response.data.success.token);
   			axios.defaults.headers.common['Authorization'] = 'Bearer '+response.data.success.token;
@@ -70,7 +71,7 @@ export default {
   			/**
   			 * get detail of logged in user
   			 */
-  			axios.get('api/user')
+  			axios.get(config.url+'api/user')
   			.then(response=>{
   				console.log(response.data);
           this.$toaster.success("Login Successfull");

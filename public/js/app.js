@@ -4007,6 +4007,7 @@ if (inBrowser && window.Vue) {
 
 "use strict";
 var _user = [];
+var url = "http://institute.dev/";
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	/**
@@ -4017,11 +4018,17 @@ var _user = [];
 		return _user;
 	},
 	/**
+  * base url of application for ajax request
+  * @return {string} url
+  */
+	url: url,
+	/**
   * Check whether logged in user has a particular status
   * @param  {string} type required status of user
   * @return {boolean}      whether user have particular status
   */
 	checkStatus: function checkStatus(type) {
+		console.log(this.user.status);
 		return this.user.status === type ? true : false;
 	},
 	/**
@@ -4042,7 +4049,7 @@ var _user = [];
 
 		return new Promise(function (resolve, reject) {
 			if (token) {
-				axios.get('api/user').then(function (response) {
+				axios.get(config.url + 'api/user').then(function (response) {
 					resolve(response.data);
 				}).catch(function (error) {
 					reject(error);
@@ -4064,6 +4071,7 @@ var _user = [];
 		if (to.meta.access) {
 			if (!this.user.status) {
 				this.getUser().then(function (data) {
+					console.log(data);
 					_this.user = data;
 					if (_this.checkStatus(to.meta.access)) {
 						next();
@@ -4071,6 +4079,7 @@ var _user = [];
 						alert("You donot have access to this route");
 					}
 				}).catch(function (error) {
+					console.log(error);
 					next('/');
 				});
 			} else {
@@ -4154,8 +4163,6 @@ module.exports = __webpack_require__(64);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store__ = __webpack_require__(13);
-
 
 
 
@@ -4168,14 +4175,14 @@ var app = new Vue({
     methods: {
         setUser: function setUser(data) {
             this.user = data;
-            __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */].user = data;
+            config.user = data;
         },
         loggedIn: function loggedIn(data) {
             this.setUser(data);
             this.$router.push('home');
         },
         loggedOut: function loggedOut() {
-            __WEBPACK_IMPORTED_MODULE_2__store__["a" /* default */].user = {};
+            config.user = {};
             this.user = {};
             localStorage.removeItem('token');
             this.$router.push('/');
@@ -4192,6 +4199,7 @@ var app = new Vue({
         });
 
         console.log("mounted");
+        console.log(config.url);
     }
 });
 
@@ -4209,6 +4217,8 @@ var app = new Vue({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_simple_toaster___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_simple_toaster__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_simple_toaster_vue_simple_toaster_css__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_simple_toaster_vue_simple_toaster_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_simple_toaster_vue_simple_toaster_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__store__ = __webpack_require__(13);
+
 
 
 
@@ -4227,6 +4237,8 @@ Object.defineProperties(__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype, {
 
 window.axios = __WEBPACK_IMPORTED_MODULE_1_axios___default.a;
 window.Vue = __WEBPACK_IMPORTED_MODULE_0_vue___default.a;
+window.config = __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */];
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_3_vue_simple_toaster___default.a, {
   position: 'top-right',
@@ -16604,8 +16616,6 @@ module.exports = function (css) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_layoutComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_layoutComponent__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_exampleComponent__ = __webpack_require__(55);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_exampleComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_exampleComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store__ = __webpack_require__(13);
-
 
 
 
@@ -16653,7 +16663,7 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
 
 router.beforeEach(function (to, from, next) {
 	console.log("route");
-	__WEBPACK_IMPORTED_MODULE_4__store__["a" /* default */].routeAccess(to, next);
+	config.routeAccess(to, next);
 });
 
 /* harmony default export */ __webpack_exports__["a"] = (router);
@@ -17359,6 +17369,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
 
         name: 'login',
@@ -17380,7 +17391,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         /**
                          * login request
                          */
-                        axios.post('api/login', { 'email': this.email, 'password': this.password }).then(function (response) {
+                        axios.post(config.url + 'api/login', { 'email': this.email, 'password': this.password }).then(function (response) {
                                 console.log(response.data.success.token);
                                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.success.token;
                                 localStorage.setItem('token', response.data.success.token);
@@ -17388,7 +17399,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                 /**
                                  * get detail of logged in user
                                  */
-                                axios.get('api/user').then(function (response) {
+                                axios.get(config.url + 'api/user').then(function (response) {
                                         console.log(response.data);
                                         _this.$toaster.success("Login Successfull");
                                         _this.$bus.$emit('loggedin', response.data); //emit loggedin event on successfull login
@@ -17553,7 +17564,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("p", { staticClass: "has-text-grey" }, [
-      _c("a", { attrs: { href: "../" } }, [_vm._v("Sign Up")]),
+      _c("a", { attrs: { href: "/#/home" } }, [_vm._v("Sign Up")]),
       _vm._v("  · \n            "),
       _c("a", { attrs: { href: "../" } }, [_vm._v("Forgot Password")]),
       _vm._v("  · \n            "),

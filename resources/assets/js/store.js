@@ -1,4 +1,5 @@
 var user = [];
+var url = "http://institute.dev/";
 
 export default {
 	/**
@@ -9,11 +10,17 @@ export default {
 		return user;
 	},
 	/**
+	 * base url of application for ajax request
+	 * @return {string} url
+	 */
+	url : url,
+	/**
 	 * Check whether logged in user has a particular status
 	 * @param  {string} type required status of user
 	 * @return {boolean}      whether user have particular status
 	 */
 	checkStatus: function(type){
+		console.log(this.user.status);
 		return (this.user.status===type)?true:false;
 	},
 	/**
@@ -34,7 +41,7 @@ export default {
 
         return new Promise(function(resolve, reject){
         	if(token){
-	            axios.get('api/user')
+	            axios.get(config.url+'api/user')
 	            .then((response)=>{resolve(response.data); })
 	            .catch((error)=>{ reject(error); });
 	        }
@@ -53,6 +60,7 @@ export default {
 		if(to.meta.access){
 			if(!this.user.status){
 				this.getUser().then(data=>{
+					console.log(data);
 					this.user = data;
 					if(this.checkStatus(to.meta.access)){
 						next();
@@ -62,6 +70,7 @@ export default {
 					}
 				})
 				.catch((error)=>{
+					console.log(error);
 					next('/');
 				});
 			}

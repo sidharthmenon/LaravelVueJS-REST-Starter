@@ -2,7 +2,7 @@ import VueRouter from 'vue-router';
 import menu from './components/menuComponent';
 import layout from './components/layoutComponent';
 import example from './components/exampleComponent';
-import config from './store';
+
 
 const router = new VueRouter({
 
