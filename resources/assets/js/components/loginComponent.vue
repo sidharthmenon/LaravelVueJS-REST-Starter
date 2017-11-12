@@ -65,6 +65,7 @@ export default {
   		.then(response=>{
   			console.log(response.data.success.token);
   			axios.defaults.headers.common['Authorization'] = 'Bearer '+response.data.success.token;
+        localStorage.setItem('token', response.data.success.token);
 
   			/**
   			 * get detail of logged in user
@@ -72,6 +73,7 @@ export default {
   			axios.get('api/user')
   			.then(response=>{
   				console.log(response.data);
+          this.$toaster.success("Login Successfull");
   				this.$bus.$emit('loggedin',response.data); //emit loggedin event on successfull login
           this.loading = false;
   			})
@@ -80,7 +82,8 @@ export default {
            * Error when retrieving user data
            */
   				console.log(error.response.data.message);
-  				alert(error.response.data.message);
+  				//alert(error.response.data.message);
+          this.$toaster.error(error.response.data.message);
           this.loading = false;
   			});
   		})
@@ -89,7 +92,8 @@ export default {
          * Error when logging in
          */
   			console.log(error.response.data.message);
-  			alert(error.response.data.message);
+  			//alert(error.response.data.message);
+        this.$toaster.error(error.response.data.message);
         this.loading = false;
   		})
   	}
